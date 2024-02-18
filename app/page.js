@@ -1,12 +1,10 @@
 import BlogList from "./components/BlogList";
 import "./globals.css";
 
-export default function Home() {
+export default function Home({ searchParams: { login, logout } }) {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <BlogList />
-      </div>
+    <main className="flex p-4 md:px-8 justify-center lg:px-24">
+      <BlogList />
     </main>
   );
 }

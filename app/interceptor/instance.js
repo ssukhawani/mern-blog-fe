@@ -1,10 +1,7 @@
 import axios from "axios";
 import { toastMessage } from "../constants/toastMessage";
 import LocalStorageRepository from "../utils/storage";
-import { handleErrorToast } from "../utils/helperFunc";
 import { logMessage } from "../constants/logMessage";
-import { toast } from "react-toastify";
-import Error from "../error";
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BACKEND_BASE_URL,
@@ -22,13 +19,14 @@ const logOnDev = (message) => {
 // Interceptor for request handling
 const onRequest = (config) => {
   const { method, url } = config;
-  const user = LocalStorageRepository.get("blog_user");
+  const user = LocalStorageRepository.get("blog-user");
 
   // Attach authorization headers if token exists
   if (user && user.token) {
     config.headers["auth-token"] = `${user.token}`;
   }
 
+  console.log(user);
   logOnDev(`🚀 [API] ${method?.toUpperCase()} ${url} | Request`);
 
   return config;
@@ -61,12 +59,8 @@ const onResponseError = async (error) => {
         break;
       case 401:
         logOnDev(logMessage.UN_AUTHORIZED);
-        LocalStorageRepository.delete("findex_user");
+        LocalStorageRepository.delete("blog-user");
         LocalStorageRepository.delete("login-popup");
-
-        setTimeout(() => {
-          window.location.href = "/";
-        }, 1500);
         break;
       case 403:
         logOnDev(logMessage.PERMISSION_DENIED);

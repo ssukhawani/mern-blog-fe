@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import authService from "../services/authService";
 import { apiEndpoints } from "../constants/apiEndpoints";
+import { handleErrorToast } from "../utils/helperFunc";
 
 const UserAuth = ({ type, setRoute, route }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -21,7 +22,15 @@ const UserAuth = ({ type, setRoute, route }) => {
   const router = useRouter();
 
   const handleError = (error) => {
-    if (error.response && error.response.data && error.response.data.message) {
+    if ("errors" in error.response) {
+      error.response.errors.forEach((err) => {
+        toast.error(err.msg);
+      });
+    } else if (
+      error.response &&
+      error.response.data &&
+      error.response.data.message
+    ) {
       toast.error(error.response.data.message);
     }
   };
@@ -60,7 +69,9 @@ const UserAuth = ({ type, setRoute, route }) => {
         .post(data, apiEndpoints.REGISTER)
         .then(() => {
           toast.success(toastMessage.SIGNUP_SUCCESS);
+          toast.info(toastMessage.LOGIN_WITH_CREDENTIALS);
           setRoute(null);
+          handleClose();
         })
         .catch((error) => {
           console.error(error);
@@ -68,22 +79,21 @@ const UserAuth = ({ type, setRoute, route }) => {
         })
         .finally(() => {
           setIsLoading(false);
-          handleClose();
         });
     } else if (type === "login") {
       authService
         .post(data, apiEndpoints.LOGIN)
         .then((response) => {
           toast.success(toastMessage.LOGIN_SUCCESS);
-          LocalStorageRepository.set("blog_user", response);
+          LocalStorageRepository.set("blog-user", response);
           if (response) {
             authService.get(apiEndpoints.USER_PROFILE).then((userDetails) => {
-              LocalStorageRepository.update("blog_user", userDetails);
+              LocalStorageRepository.update("blog-user", userDetails);
             });
           }
           handleClose();
           setTimeout(() => {
-            router.push("/?login=success");
+            router.push("/");
           }, 300);
         })
         .catch((error) => {

@@ -1,16 +1,18 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UserAuth from "./Auth";
 import LocalStorageRepository from "../utils/storage";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import ProfileIcon from "./ProfileIcon";
 
 const Navbar = () => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [route, setRoute] = useState(null);
-  const user = LocalStorageRepository.get("blog_user");
   const popup = LocalStorageRepository.get("login-popup");
+  const user = LocalStorageRepository.get("blog-user");
+  const pathname = usePathname();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -26,9 +28,14 @@ const Navbar = () => {
 
         {/* Navigation Links - Desktop */}
         <nav className="hidden md:flex space-x-8">
-          <Link href="/">Home</Link>
-          <button onClick={() => setRoute("login")}>Login</button>
-          <button onClick={() => setRoute("signup")}>Signup</button>
+          {user && user.token ? (
+            <ProfileIcon />
+          ) : (
+            <>
+              <button onClick={() => setRoute("login")}>Login</button>
+              <button onClick={() => setRoute("signup")}>Signup</button>
+            </>
+          )}
         </nav>
 
         {/* Hamburger Menu - Mobile */}
@@ -55,24 +62,26 @@ const Navbar = () => {
         {isOpen && (
           <div className="md:hidden absolute top-full left-0 right-0 bg-black text-white p-4">
             <div className="flex flex-col space-y-4 px-2">
-              <button
-                className="inline-block text-left"
-                onClick={() => router.push("/")}
-              >
-                Home
-              </button>
-              <button
-                className="inline-block text-left"
-                onClick={() => setRoute("login")}
-              >
-                Login
-              </button>
-              <button
-                className="inline-block text-left"
-                onClick={() => setRoute("signup")}
-              >
-                Signup
-              </button>
+              <nav className="lg:hidden md:flex space-x-8">
+                {user && user.token ? (
+                  <ProfileIcon />
+                ) : (
+                  <>
+                    <button
+                      className="inline-block text-left"
+                      onClick={() => setRoute("login")}
+                    >
+                      Login
+                    </button>
+                    <button
+                      className="inline-block text-left"
+                      onClick={() => setRoute("signup")}
+                    >
+                      Signup
+                    </button>
+                  </>
+                )}
+              </nav>
             </div>
           </div>
         )}
