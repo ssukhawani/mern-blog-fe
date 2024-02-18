@@ -8,7 +8,7 @@ import Loader from "../loading";
 import LocalStorageRepository from "../utils/storage";
 import { handleErrorToast } from "../utils/helperFunc";
 
-export async function BlogList() {
+export function BlogList() {
   const [allBlogs, setAllBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const user = LocalStorageRepository.get("blog-user");
@@ -23,7 +23,9 @@ export async function BlogList() {
         handleErrorToast(error);
         console.error("Error fetching blog data:", error);
       } finally {
-        setLoading(false);
+        setTimeout(() => {
+          setLoading(false);
+        }, 500);
       }
     };
 
