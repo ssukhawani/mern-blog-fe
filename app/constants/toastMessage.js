@@ -7,4 +7,7 @@ export const toastMessage = {
   INVALID_RESPONSE: "Invalid response.",
   SERVER_NOT_RESPONDING: "Server not responding.",
   ALL_FIELDS_REQUIRED: "All fields are required.",
+  NEW_BLOG_CREATED: "New blog created",
+  BLOG_UPDATED: "Blog updated",
+  BLOG_DELETE: "Blog deleted",
 };

@@ -2,8 +2,9 @@
 import React, { useState } from "react";
 import blogService from "@/app/services/blogService";
 import { useRouter } from "next/navigation";
-import { handleErrorToast } from "@/app/utils/helperFunc";
 import Link from "next/link";
+import { toastMessage } from "@/app/constants/toastMessage";
+import { toast } from "react-toastify";
 
 // CreateBlog component
 const CreateBlog = () => {
@@ -23,16 +24,30 @@ const CreateBlog = () => {
     });
   };
 
+  const handleError = (error) => {
+    if ("errors" in error.response) {
+      error.response.errors.forEach((err) => {
+        toast.error(err.msg);
+      });
+    } else if (
+      error.response &&
+      error.response.data &&
+      error.response.data.message
+    ) {
+      toast.error(error.response.data.message);
+    }
+  };
+
   // Handle the submit of the form
   const handleCreate = async () => {
     try {
       // Call the create blog API
       const createdBlog = await blogService.post(newBlog);
-
+      toast.success(toastMessage.NEW_BLOG_CREATED);
       // Redirect to homepage
       router.push(`/`);
     } catch (error) {
-      handleErrorToast(error);
+      handleError(error);
       console.error("Error creating blog:", error);
     }
   };

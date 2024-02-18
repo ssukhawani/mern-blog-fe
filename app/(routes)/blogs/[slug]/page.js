@@ -7,6 +7,8 @@ import blogService from "@/app/services/blogService";
 import LocalStorageRepository from "@/app/utils/storage";
 import { handleErrorToast } from "@/app/utils/helperFunc";
 import Image from "next/image";
+import { toast } from "react-toastify";
+import { toastMessage } from "@/app/constants/toastMessage";
 
 const Blogs = ({ params: { slug } }) => {
   const [blogData, setBlogData] = useState({});
@@ -57,7 +59,10 @@ const Blogs = ({ params: { slug } }) => {
       // Call the update blog API
       const updatedBlog = await blogService.put(blogData.slug, editedBlog);
       // Redirect to the new slug
-      router.push(`/`);
+      toast.success(toastMessage.BLOG_UPDATED);
+      setTimeout(() => {
+        router.push("/");
+      }, 300);
     } catch (error) {
       handleErrorToast(error);
       console.error("Error updating blog:", error);
@@ -79,7 +84,11 @@ const Blogs = ({ params: { slug } }) => {
       // You can implement the delete functionality here using the blogService
       await blogService.delete(blogData.slug);
       // Redirect to a different page after successful deletion
-      router.push("/");
+      toast.info(toastMessage.BLOG_DELETE);
+
+      setTimeout(() => {
+        router.push("/");
+      }, 300);
     } catch (error) {
       handleErrorToast(error);
       console.error("Error deleting blog:", error);

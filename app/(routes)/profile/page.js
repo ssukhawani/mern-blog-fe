@@ -1,5 +1,6 @@
 "use client";
 import { apiEndpoints } from "@/app/constants/apiEndpoints";
+import { toastMessage } from "@/app/constants/toastMessage";
 import Loader from "@/app/loading";
 import authService from "@/app/services/authService";
 import { handleErrorToast } from "@/app/utils/helperFunc";
@@ -7,6 +8,7 @@ import LocalStorageRepository from "@/app/utils/storage";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 const ProfilePage = () => {
   const router = useRouter();
@@ -34,6 +36,7 @@ const ProfilePage = () => {
   }, []);
 
   const handleLogout = () => {
+    toast.success(toastMessage.LOGGED_OUT);
     LocalStorageRepository.delete("blog-user");
     LocalStorageRepository.delete("login-popup");
     setTimeout(() => {
