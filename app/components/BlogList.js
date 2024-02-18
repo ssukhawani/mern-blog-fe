@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Loader from "../loading";
 import LocalStorageRepository from "../utils/storage";
+import { handleErrorToast } from "../utils/helperFunc";
 
 export async function BlogList() {
   const [allBlogs, setAllBlogs] = useState([]);
