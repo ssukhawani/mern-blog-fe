@@ -1,3 +1,34 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+body {
+    background-color: #cccccc !important;
+}
+
+
+::-webkit-scrollbar {
+    width: 8px;
+    /* Width of the scrollbar */
+    height: 0px;
+}
+
+/* Customize the scrollbar thumb (the draggable part) */
+::-webkit-scrollbar-thumb {
+    background: #888;
+    /* Color of the thumb */
+    border-radius: 5px;
+    /* Rounded corners for the thumb */
+}
+
+/* Customize the scrollbar track (the non-draggable part) */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    /* Color of the track */
+}
+
+/* Hide scrollbar buttons (arrows) */
+::-webkit-scrollbar-button {
+    display: none;
+}
